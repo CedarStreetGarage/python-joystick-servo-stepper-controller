@@ -22,6 +22,3 @@ class Loop():
       self.timer = Timer(self.rate, self._fun)
       self.timer.start()
 
-   def stop(self):
-      self.timer.cancel()
-
