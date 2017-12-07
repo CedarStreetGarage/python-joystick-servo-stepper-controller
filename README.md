@@ -23,7 +23,10 @@ depends on the controller.
 Nothing crazy here.  There is a `Joystick` class that is basically a wrapper for 
 `pygame` and fairly specific to a Logitch F310 joystick using only some of the 
 axes and buttons.  There is a `Loop` class that is allows scheduling a repeated
-task on an interval, used for updates.  There are the two controller classes, 
+task on a fixed interval, used for updates.  There are the two controller classes, 
 `Maestro` and `Norberg` that accommodate the specifics of the respective controller
-while providing a consistent interface for setting either values or increments.
+while providing a consistent interface (e.g. `pos()` and `inc()` for setting 
+either absolute or incremental positions.  For the purposes of joystick control 
+only the incremental position is used, though for other types of control the 
+direct position control is used.
 
