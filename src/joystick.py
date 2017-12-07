@@ -1,9 +1,6 @@
 import pygame
 
 
-JOYSTICK = 0
-
-
 class Joystick(object):
 
     axis_def   = ['lx','ly','rx','ry']
@@ -12,7 +9,7 @@ class Joystick(object):
     def __init__(self):
         pygame.display.init()
         pygame.joystick.init()
-        self.joystick = pygame.joystick.Joystick(JOYSTICK)
+        self.joystick = pygame.joystick.Joystick(0)
         self.joystick.init()
         pygame.event.pump()
 

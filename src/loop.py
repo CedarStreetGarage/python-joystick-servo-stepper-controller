@@ -5,20 +5,16 @@ from   threading import Timer
 class Loop():
 
    def __init__(self, rate):
-      self.rate = rate
-
-   def _fun(self):
-      t = time.time()
-      self.fun()
-      elapsed = time.time() - t
-      self.timer = Timer(self.rate - elapsed, self._fun)
-      self.timer.start()
+      self.time_step = 1.0 / rate
 
    def fun(self, fun):
       self.fun = fun
       return self
 
    def start(self):
-      self.timer = Timer(self.rate, self._fun)
+      start_time = time.time()
+      self.fun()
+      elapsed = time.time() - start_time
+      self.timer = Timer(self.time_step - elapsed, self.start)
       self.timer.start()
 
