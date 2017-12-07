@@ -6,8 +6,9 @@ from src.maestro  import Maestro
 from src.norberg  import Norberg
 
 
-LOOP_TIME = 0.25
-STEP_SIZE = 0.02
+LOOP_TIME     = 0.25
+BUTTON_STEP   = 0.02
+JOYSTICK_MULT = 0.2
 
 
 class Main(object):
@@ -27,14 +28,18 @@ class Main(object):
         self.l = Loop(LOOP_TIME)
 
     def loop(self):
-        wx = STEP_SIZE * (self.j.button('a') - self.j.button('b'))
-        wy = STEP_SIZE * (self.j.button('x') - self.j.button('y'))
-        self.c.set_val(joint_map['waist'],     self.j.axis('lx'))
-        self.c.set_val(joint_map['shoulder'],  self.j.axis('ly'))
-        self.c.set_val(joint_map['elbow'],     self.j.axis('rx'))
-        self.c.set_val(joint_map['wrist_rot'], self.j.axis('ry'))
-        self.c.set_inc(joint_map['wrist_x'],   wx)
-        self.c.set_inc(joint_map['wrist_y'],   wy)
+        waist     = JOYSTICK_MULT * self.j.axis('lx')
+        shoulder  = JOYSTICK_MULT * self.j.axis('ly')
+        elbow     = JOYSTICK_MULT * self.j.axis('rx')
+        wrist_rot = JOYSTICK_MULT * self.j.axis('ry')
+        wrist_x   = BUTTON_STEP * (self.j.button('a') - self.j.button('b'))
+        wrist_y   = BUTTON_STEP * (self.j.button('x') - self.j.button('y'))
+        self.c.inc(joint_map['waist'],     waist)
+        self.c.inc(joint_map['shoulder'],  shoulder)
+        self.c.inc(joint_map['elbow'],     elbow)
+        self.c.inc(joint_map['wrist_rot'], wrist_rot)
+        self.c.inc(joint_map['wrist_x'],   wrist_x)
+        self.c.inc(joint_map['wrist_y'],   wrist_y)
 
     def print_loop(self):
         for i in self.j.axes():
