@@ -47,5 +47,5 @@ class Main(object):
         self.l.fun(self.loop).start()
 
 
-Main(Norberg()).go()
+Main(Maestro()).go()
 

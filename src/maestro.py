@@ -27,19 +27,19 @@ class Maestro(object):
         else:
             self.serial.write(bytes(self.prefix + cmd, 'latin-1'))
 
-    def _byte_map(self, x):
+    def _byte_map(self, cmd, ch, x):
         lsb = x & 0x7f 
         msb = (x >> 7) & 0x7f 
-        return chr(lsb) + chr(msb)
+        return chr(cmd) + chr(ch) + chr(lsb) + chr(msb)
 
     def _set_speed(self):
         for ch in range(CHANNELS):
-            cmd = chr(0x07) + chr(ch) + self._byte_map(SPEED)
+            cmd = self._byte_map(0x07, ch, SPEED)
             self._send(cmd)
 
     def _set_acceleration(self):
         for ch in range(CHANNELS):
-            cmd = chr(0x09) + chr(ch) + self._byte_map(ACCELERATION)
+            cmd = self._byte_map(0x09, ch, ACCELERATION)
             self._send(cmd)
 
     def _scale(self, x):
@@ -47,13 +47,11 @@ class Maestro(object):
 
     def set_val(self, ch, x):
         self.vals[ch] = x
-        val = self._byte_map(self._scale(self.vals[ch]))
-        cmd = chr(0x04) + chr(ch) + val
+        cmd = self._byte_map(0x04, ch, self._scale(self.vals[ch]))
         self._send(cmd)
 
     def set_inc(self, ch, x):
         self.vals[ch] += x
-        val = self._byte_map(self._scale(self.vals[ch]))
-        cmd = chr(0x04) + chr(ch) + val
+        cmd = self._byte_map(0x04, ch, self._scale(self.vals[ch]))
         self._send(cmd)
 
