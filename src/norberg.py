@@ -1,15 +1,14 @@
-import sys
-import serial
+from controller import Controller
 
 
-class Norberg(object):
+class Norberg(Controller):
 
     def __init__(self):
-        pass
+        Controller.__init__(self, '/dev/???')
 
-    def pos(self, ch, x):
-        pass
-
-    def inc(self, ch, y):
-        pass
+    # Manual page 58
+    def _send(self, ch, x):
+        val = int(100.0 * x)
+        cmd = '{}m\n300$P\n1000$R\n{}$G'.format(ch, val)
+        self._write(cmd)
 
