@@ -19,5 +19,5 @@ class Controller(object):
         self._send(ch, self.vals[ch])
 
     def inc(self, ch, x):
-        self.pos(self.vals[ch] + x)
+        self.pos(ch, self.vals[ch] + x)
 

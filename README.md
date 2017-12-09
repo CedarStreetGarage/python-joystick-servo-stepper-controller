@@ -37,7 +37,7 @@ configuring the maximum speed, acceleration and stops using the utility
 rather than implementing them in software here. This controller by default 
 runs in vector mode with all actions on all servos occuring synchronously.
 
-The Norberg controller is a far mode advanced controller intended for 
+The Norberg controller is a far more advanced controller intended for 
 CNC control.  That said, it has a slew of features not used here (e.g. 
 vector control for curve contours, analog-to-digital inputs, etc.).  It
 allows either synchronous (vector) or asynchronous control; here we

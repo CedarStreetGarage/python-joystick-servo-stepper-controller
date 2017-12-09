@@ -8,9 +8,9 @@ from src.norberg  import Norberg
 
 class Main(object):
 
-    multiplier = 0.02
-
-    joint_map = {
+    rate = 20
+    mult = 0.02
+    jmap = {
         'waist':     0,
         'shoulder':  1,
         'elbow':     2,
@@ -22,25 +22,35 @@ class Main(object):
     def __init__(self, controller):
         self.c = controller
         self.j = Joystick()
-        self.l = Loop(5)
+        self.l = Loop(self.rate)
 
     def diff(self, a, b):
         return self.j.button(a) - self.j.button(b)
 
-    def loop(self):
-        self.c.inc(joint_map['waist'],     self.multiplier * self.j.axis('lx'))
-        self.c.inc(joint_map['shoulder'],  self.multiplier * self.j.axis('ly'))
-        self.c.inc(joint_map['elbow'],     self.multiplier * self.j.axis('rx'))
-        self.c.inc(joint_map['wrist_rot'], self.multiplier * self.j.axis('ry'))
-        self.c.inc(joint_map['wrist_x'],   self.multiplier * self.diff('a','b'))
-        self.c.inc(joint_map['wrist_y'],   self.multiplier * self.diff('x','y'))
+    def _set_joints(self):
+        self.c.inc(self.jmap['waist'],     self.mult * self.j.axis('lx'))
+        self.c.inc(self.jmap['shoulder'],  self.mult * self.j.axis('ly'))
+        self.c.inc(self.jmap['elbow'],     self.mult * self.j.axis('rx'))
+        self.c.inc(self.jmap['wrist_rot'], self.mult * self.j.axis('ry'))
+        self.c.inc(self.jmap['wrist_x'],   self.mult * self.diff('a','b'))
+        self.c.inc(self.jmap['wrist_y'],   self.mult * self.diff('x','y'))
 
-    def print_loop(self):
+    def _print_joystick(self):
         for i in self.j.axes():
-            print(i + ' - ' + str(self.j.axis(i)))
+            print('{} - {}'.format(i, self.j.axis(i)))
         for i in self.j.buttons():
-            print(i + ' - ' + str(self.j.button(i)))
+            print('{} - {}'.format(i, self.j.button(i)))
         print('')
+
+    def _print_controller(self):
+        for i, x in enumerate(self.c.vals):
+            print('{} - {}'.format(i, x))
+        print('')
+
+    def loop(self):
+        self._set_joints()
+        self._print_joystick()
+        self._print_controller()
 
     def go(self):
         self.l.fun(self.loop).start()
