@@ -2,6 +2,7 @@
 
 from src.joystick import Joystick
 from src.loop     import Loop
+from src.quantize import Quantize
 from src.maestro  import Maestro
 from src.norberg  import Norberg
 
@@ -10,6 +11,7 @@ class Main(object):
 
     rate = 20
     mult = 0.02
+    prec = 0.02
     jmap = {
         'waist':     0,
         'shoulder':  1,
@@ -23,17 +25,21 @@ class Main(object):
         self.c = controller
         self.j = Joystick()
         self.l = Loop(self.rate)
-
-    def diff(self, a, b):
-        return self.j.button(a) - self.j.button(b)
+        self.q = Quantize(self.prec)
 
     def _set_joints(self):
-        self.c.inc(self.jmap['waist'],     self.mult * self.j.axis('lx'))
-        self.c.inc(self.jmap['shoulder'],  self.mult * self.j.axis('ly'))
-        self.c.inc(self.jmap['elbow'],     self.mult * self.j.axis('rx'))
-        self.c.inc(self.jmap['wrist_rot'], self.mult * self.j.axis('ry'))
-        self.c.inc(self.jmap['wrist_x'],   self.mult * self.diff('a','b'))
-        self.c.inc(self.jmap['wrist_y'],   self.mult * self.diff('x','y'))
+        lx = self.q.quantize(self.j.axis('lx'))
+        ly = self.q.quantize(self.j.axis('ly'))
+        rx = self.q.quantize(self.j.axis('rx'))
+        ry = self.q.quantize(self.j.axis('ry'))
+        wx = self.q.quantize(self.j.button('b') - self.j.button('a'))
+        wy = self.q.quantize(self.j.button('y') - self.j.button('x'))
+        self.c.inc(self.jmap['waist'],     self.mult * lx)
+        self.c.inc(self.jmap['shoulder'],  self.mult * ly)
+        self.c.inc(self.jmap['elbow'],     self.mult * rx)
+        self.c.inc(self.jmap['wrist_rot'], self.mult * ry)
+        self.c.inc(self.jmap['wrist_x'],   self.mult * wx)
+        self.c.inc(self.jmap['wrist_y'],   self.mult * wy)
 
     def _print_joystick(self):
         for i in self.j.axes():
