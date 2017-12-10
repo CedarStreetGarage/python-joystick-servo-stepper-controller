@@ -3,63 +3,58 @@
 from src.joystick import Joystick
 from src.loop     import Loop
 from src.quantize import Quantize
+from src.joints   import Joints
 from src.maestro  import Maestro
 from src.norberg  import Norberg
 
 
+RATE = 20
+MULT = 0.02
+PREC = 0.02
+
+
 class Main(object):
 
-    rate = 20
-    mult = 0.02
-    prec = 0.02
-    jmap = {
-        'waist':     0,
-        'shoulder':  1,
-        'elbow':     2,
-        'wrist_rot': 3,
-        'wrist_x':   4,
-        'wrist_y':   5
-    }
-
     def __init__(self, controller):
-        self.c = controller
-        self.j = Joystick()
-        self.l = Loop(self.rate)
-        self.q = Quantize(self.prec)
+        self.cont  = controller
+        self.joy   = Joystick()
+        self.loop  = Loop(RATE)
+        self.quant = Quantize(PREC)
+        self.joint = Joints()
 
     def _set_joints(self):
-        lx = self.q.quantize(self.j.axis('lx'))
-        ly = self.q.quantize(self.j.axis('ly'))
-        rx = self.q.quantize(self.j.axis('rx'))
-        ry = self.q.quantize(self.j.axis('ry'))
-        wx = self.q.quantize(self.j.button('b') - self.j.button('a'))
-        wy = self.q.quantize(self.j.button('y') - self.j.button('x'))
-        self.c.inc(self.jmap['waist'],     self.mult * lx)
-        self.c.inc(self.jmap['shoulder'],  self.mult * ly)
-        self.c.inc(self.jmap['elbow'],     self.mult * rx)
-        self.c.inc(self.jmap['wrist_rot'], self.mult * ry)
-        self.c.inc(self.jmap['wrist_x'],   self.mult * wx)
-        self.c.inc(self.jmap['wrist_y'],   self.mult * wy)
+        lx = self.quant.get(self.joy.axis('lx'))
+        ly = self.quant.get(self.joy.axis('ly'))
+        rx = self.quant.get(self.joy.axis('rx'))
+        ry = self.quant.get(self.joy.axis('ry'))
+        wx = self.quant.get(self.joy.button('b') - self.joy.button('a'))
+        wy = self.quant.get(self.joy.button('y') - self.joy.button('x'))
+        self.cont.inc(self.joint.get('waist'),     MULT * lx)
+        self.cont.inc(self.joint.get('shoulder'),  MULT * ly)
+        self.cont.inc(self.joint.get('elbow'),     MULT * rx)
+        self.cont.inc(self.joint.get('wrist_rot'), MULT * ry)
+        self.cont.inc(self.joint.get('wrist_x'),   MULT * wx)
+        self.cont.inc(self.joint.get('wrist_y'),   MULT * wy)
 
     def _print_joystick(self):
-        for i in self.j.axes():
-            print('{} - {}'.format(i, self.j.axis(i)))
-        for i in self.j.buttons():
-            print('{} - {}'.format(i, self.j.button(i)))
+        for i in self.joy.axes():
+            print('{} - {}'.format(i, self.joy.axis(i)))
+        for i in self.joy.buttons():
+            print('{} - {}'.format(i, self.joy.button(i)))
         print('')
 
     def _print_controller(self):
-        for i, x in enumerate(self.c.vals):
+        for i, x in enumerate(self.cont.vals):
             print('{} - {}'.format(i, x))
         print('')
 
-    def loop(self):
+    def _loop(self):
         self._set_joints()
         self._print_joystick()
         self._print_controller()
 
     def go(self):
-        self.l.fun(self.loop).start()
+        self.loop.fun(self._loop).start()
 
 
 Main(Maestro()).go()
