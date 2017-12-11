@@ -20,16 +20,23 @@ Merlin 6DOF arm.
 
 There is a `Joystick` class that is basically a wrapper for `pygame` and is 
 fairly specific to a Logitch F310 joystick using only some of the axes and 
-buttons.  There is a `Loop` class that is allows scheduling a repeated task 
-on a fixed interval, used for updates.  There are the two controller classes, 
-`Maestro` and `Norberg` that accommodate the specifics of the respective 
-controller.  Each of these are subclasses of the `Controller` class that 
-provides common initialization and a consisten interface for control (e.g.
-`pos()` and `inc()` for setting either absolute or incremental 
-positions).  For the purposes of joystick control  only the incremental 
-position is used, though for other types of control (e.g. abstracting the 
-joint angles using inverse kinematics or similar) the direct position 
-control is used.
+buttons.  It is really easy to extend if someone wanted, pretty handy 
+set of abstractions.  There is a `Loop` class that is allows scheduling a 
+repeated task on a fixed interval, used for updates.  Fixed interval meaning 
+fixed time between starting runs, it accommodates the duration of the actual
+task, which needs to be less than the desired loop time.  There is a 
+`Quantize` class that allows for arbitrary returned precision; this is used
+to prevent noise on the joysticks from changing the incremental positions
+of the controllers.  There are the two controller classes, `Maestro` and 
+`Norberg` that accommodate the specifics of the respective controller. Each 
+of these are subclasses of the `Controller` class that provides common 
+initialization and a consisten interface for control (e.g. `pos()` and 
+`inc()` for setting either absolute or incremental positions).  For the 
+purposes of joystick control  only the incremental position is used, though 
+for other types of control (e.g. abstracting the joint angles using inverse 
+kinematics or similar) the direct position control is used.  There is also
+a `Joints` class that is basically just a lookup between English names for
+robot joints and the index for the joint used by the controller.
 
 The Maestro controller must be set up in advance using a utility provided
 by the manufacturer.  Since this must be done, advantage can be taken of 
