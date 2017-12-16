@@ -36,7 +36,12 @@ purposes of joystick control  only the incremental position is used, though
 for other types of control (e.g. abstracting the joint angles using inverse 
 kinematics or similar) the direct position control is used.  There is also
 a `Joints` class that is basically just a lookup between English names for
-robot joints and the index for the joint used by the controller.
+robot joints and the index for the joint used by the controller.  The whole
+thing is wrapped in an argument parser that delegates the different controller
+commands.  The reason for this is because I intend to add inverse kinematics
+control and would like to be able to select what type of coordinate system
+the joystick control will be describing as well as which particular 
+physical controller will be used as an interface.  
 
 The Maestro controller must be set up in advance using a utility provided
 by the manufacturer.  Since this must be done, advantage can be taken of 
