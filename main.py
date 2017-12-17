@@ -1,9 +1,10 @@
 #! /usr/bin/python
 
 import argparse
-from   src.maestro       import Maestro
-from   src.norberg       import Norberg
-from   src.joint_control import JointControl
+from   src.maestro                   import Maestro
+from   src.norberg                   import Norberg
+from   src.joint_control             import JointControl
+from   src.inverse_kinematic_control import InverseKinematicControl
 
 
 p = argparse.ArgumentParser()
@@ -20,8 +21,8 @@ if args.joints and args.maestro:
 if args.joints and args.norberg:
     JointControl(Norberg()).go()
 if args.cartesian and args.maestro:
-    pass
+    InverseKinematicControl(Maestro()).go()
 if args.cartesian and args.norberg:
-    pass
+    InverseKinematicControl(Norberg()).go()
 
 p.print_help()
