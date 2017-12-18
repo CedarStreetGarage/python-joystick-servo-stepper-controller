@@ -1,23 +1,17 @@
 import sys
 import serial
+from   src.virtual_controller import VirtualController
 
 
-class Controller(object):
+class Controller(VirtualController):
 
     def __init__(self, device):
+        VirtualController.__init__(self)
         self.serial = serial.Serial(device)
-        self.vals   = [0.0] * 6
 
     def _write(self, cmd):
         if sys.version_info[0] == 2:
             self.serial.write(cmd)
         else:
             self.serial.write(bytes(cmd, 'latin-1'))
-
-    def pos(self, ch, x):
-        self.vals[ch] = x
-        self._send(ch, self.vals[ch])
-
-    def inc(self, ch, x):
-        self.pos(ch, self.vals[ch] + x)
 
