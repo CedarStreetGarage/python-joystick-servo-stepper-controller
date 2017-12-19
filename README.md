@@ -31,17 +31,20 @@ of the controllers.  There are the two controller classes, `Maestro` and
 `Norberg` that accommodate the specifics of the respective controller. Each 
 of these are subclasses of the `Controller` class that provides common 
 initialization and a consisten interface for control (e.g. `pos()` and 
-`inc()` for setting either absolute or incremental positions).  For the 
-purposes of joystick control  only the incremental position is used, though 
-for other types of control (e.g. abstracting the joint angles using inverse 
-kinematics or similar) the direct position control is used.  There is also
-a `Joints` class that is basically just a lookup between English names for
-robot joints and the index for the joint used by the controller.  The whole
-thing is wrapped in an argument parser that delegates the different controller
-commands.  The reason for this is because I intend to add inverse kinematics
-control and would like to be able to select what type of coordinate system
-the joystick control will be describing as well as which particular 
-physical controller will be used as an interface.  
+`inc()` for setting either absolute or incremental positions).  `Controller`
+is a subclass of `VirtualController`, which is in place so that the getters 
+and setters can be used virtually, meaning without actually controlling
+some serial device (used for intermediate values for inverse kinematics).  For
+the purposes of joystick control only the incremental position is used, though 
+for other types of control (e.g. inverse kinematics) the direct position 
+control is used.  There is also a `Joints` class that is basically just a 
+lookup between English names for the 6DOF robot joints and the index for the 
+joint used by the controller, as well as a `Cartesian` class that is a lookup
+for traditional Cartesian axis names.  The whole of this is wrapped in an 
+argument parser that delegates the different controller commands.  The reason 
+for this is that it is handy to be able to select what type of coordinate system
+the joystick control will be describing as well as which particular physical 
+controller will be used as an interface.  
 
 The Maestro controller must be set up in advance using a utility provided
 by the manufacturer.  Since this must be done, advantage can be taken of 
