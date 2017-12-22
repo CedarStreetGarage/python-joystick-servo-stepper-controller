@@ -1,7 +1,7 @@
-from src.joystick import Joystick
-from src.loop     import Loop
-from src.quantize import Quantize
-from src.joints   import Joints
+from input.joystick  import Joystick
+from assist.loop     import Loop
+from assist.quantize import Quantize
+from joints          import Joints
 
 
 RATE = 20

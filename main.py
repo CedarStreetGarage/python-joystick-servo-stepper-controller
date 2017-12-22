@@ -1,8 +1,8 @@
 #! /usr/bin/python
 
 import argparse
-from   src.maestro                   import Maestro
-from   src.norberg                   import Norberg
+from   src.control.maestro           import Maestro
+from   src.control.norberg           import Norberg
 from   src.joint_control             import JointControl
 from   src.inverse_kinematic_control import InverseKinematicControl
 

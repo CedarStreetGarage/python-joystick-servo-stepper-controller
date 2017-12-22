@@ -1,6 +1,6 @@
 import sys
 import serial
-from   src.virtual_controller import VirtualController
+from   virtual_controller import VirtualController
 
 
 class Controller(VirtualController):
