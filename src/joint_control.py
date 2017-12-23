@@ -1,4 +1,4 @@
-from input.joystick   import Joystick
+from inputs.joystick  import Joystick
 from other.loop       import Loop
 from other.quantize   import Quantize
 from constants.joints import Joints
