@@ -1,10 +1,10 @@
 #! /usr/bin/python
 
 import argparse
-from   src.control.maestro           import Maestro
-from   src.control.norberg           import Norberg
-from   src.joint_control             import JointControl
-from   src.inverse_kinematic_control import InverseKinematicControl
+from   src.control.maestro import Maestro
+from   src.control.norberg import Norberg
+from   src.joint_control   import JointControl
+from   src.ik_control      import InverseKinematicControl
 
 
 p = argparse.ArgumentParser()

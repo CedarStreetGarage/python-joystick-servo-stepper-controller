@@ -1,12 +1,8 @@
-from joints    import Joints
-from cartesian import Cartesian
-
-
 class InverseKinematics(object):
 
-    def __init__(self):
-        self.j = Joints()
-        self.c = Cartesian()
+    def __init__(self, joints, cartesian):
+        self.j = joints
+        self.c = cartesian
 
     def _decode_cartesian(self, cartesian):
         x = cartesian[self.c['x']]

@@ -1,10 +1,10 @@
 from input.joystick             import Joystick
-from assist.loop                import Loop
-from assist.quantize            import Quantize
-from joints                     import Joints
-from cartesian                  import Cartesian
+from other.loop                 import Loop
+from other.quantize             import Quantize
+from constants.joints           import Joints
+from constants.cartesian        import Cartesian
 from control.virtual_controller import VirtualController
-from inverse_kinematics         import InverseKinematics
+from ik.inverse_kinematics      import InverseKinematics
 
 
 RATE = 20
@@ -22,7 +22,7 @@ class InverseKinematicControl(object):
         self.joint = Joints()
         self.cart  = Cartesian()
         self.virt  = VirtualController()
-        self.ik    = InverseKinematics()
+        self.ik    = InverseKinematics(self.joint, self.cart)
 
     def _set_waist_shoulder_elbow(self):
         lx = self.quant.get(self.joy.axis('lx'))
